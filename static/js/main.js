@@ -70,7 +70,7 @@ var queue = new Queue();
           $('.instagram-username, .instagram-pic > img, .instagram-comment').fadeOut(600, function(){
             $('.instagram-pic > img').attr('src', img.img);
             $('.instagram-comment > p').html(img.comment);
-            $('#instagram-username').html(' @ '+img.username);
+            $('#instagram-username').html('@'+img.username);
             $('#user-photo').attr('src', img.profile_picture);
           }).fadeIn();
         
@@ -80,7 +80,7 @@ var queue = new Queue();
 
     setTimeout(function() {
         showQueue();
-    }, settings.display_time * 100);
+    }, settings.display_time * 1000);
   }
 
   $(document).ready(function() {
