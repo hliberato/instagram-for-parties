@@ -1,7 +1,5 @@
 body {
-    background-image: url("http://wallpapercorp.com/wp-content/uploads/2015/08/pink-smoke-black-wide-wallpaper.jpg");
-		background-repeat: no-repeat;
-		background-position: center center;
+    background-color: black;	
 }
 .loader {
 	display: none;
