@@ -1,198 +1,25 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
 		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 		<script src="http://code.stephenmorley.org/javascript/queues/Queue.js"></script>
-
-		<script type="text/javascript">
-			var settings = {
-				hashtags: "VemRed", // separated by comma
-				client_id: "b72d081f9d4e48639b48bdc682eafc99", // your instagram API key
-				images_to_fetch: 20, // fetch 20 images every request to instagram
-				fetch_time: 50, // fetch pictures every 50 seconds
-				display_time: 10 // change picture every 10 seconds
-			}
-
-			// the heart of this app
-			var queue = new Queue();
-
-		    function fillQueue() {
-		    	// make the queue always empty so we can see all pics!
-		    	if (queue.getLength() < 10)
-		    	{
-					$.ajax({
-						dataType: "jsonp",
-						url: "https://api.instagram.com/v1/tags/" + settings.hashtags + "/media/recent",
-						data: {
-							access_token: null,
-							client_id: settings.client_id,
-							count: settings.images_to_fetch
-						},
-						success: function(response) {
-							
-							var photos = response.data;
-							console.log("Number of pictures fetched: " + photos.length);
-
-							for (var i = 0; i < photos.length; i++)
-							{
-								var photo = photos[i];
-
-								var img = photo.images.standard_resolution.url; // get photo url
-								var username = photo.user.username; // get username
-								var comment = photo.caption.text; // get message
-
-								// put the picture on queue
-								queue.enqueue({img: img, username: username, comment: comment});
-								console.log("Added image taken by: " + username);
-							}						
-						}
-					});
-				}
-				else
-				{
-					console.log("Queue is full!");
-				}
-
-				setTimeout(function() {
-			        fillQueue();
-			    }, settings.fetch_time * 1000);
-		    }
-
-		    function showQueue()
-		    {
-		    	if (! queue.isEmpty())
-		    	{
-			    	var img = queue.dequeue();
-			    	console.log("Displaying: " + img.img);
-
-			    	// check if the images are different
-			    	if ($('.instagram-pic > img').attr('src') != img.img)
-			    	{
-			    		console.log('New picture, now displaying: ' + img.img);
-
-			    		// preload image before display
-				    	$('<img class="loader" />').attr('src', img.img).appendTo('body').load(function(){
-
-				    		$('.instagram-username, .instagram-pic > img, .instagram-comment').fadeOut(600, function(){
-				    			$('.instagram-pic > img').attr('src', img.img);
-								$('.instagram-comment > p').html(img.comment);
-								$('.instagram-username > p').html('@' + img.username);
-				    		}).fadeIn();
-							
-						});
-					}
-				}
-
-		    	setTimeout(function() {
-			        showQueue();
-			    }, settings.display_time * 1000);
-		    }
-
-		    $(document).ready(function() {
-				fillQueue();
-				showQueue();
-		    });
-		</script>
-		
-		<style>
-			* {
-				margin:0px;
-				padding: 0px;
-			}
-			
-			body {
-				height: 100%;
-				font-family: 'Tahoma';
-				background-image: url('http://i.imgur.com/66ptSTe.jpg');	
-			}
-
-			.container {
-				width: 700px;
-				padding-top: 50px;
-				margin: 0 auto;
-			}
-
-			.header-container {
-				height: 35px;
-				text-align: center;
-				background-color: #416f96;
-				border-radius: 20px 20px 0 0;
-			}
-
-			.header-container > span {
-				height: 40px;
-				color: #ffffff;
-				font-size: 20px;
-				font-weight: bold;
-				line-height: 35px;
-			}			
-
-			.image-container {
-				padding-top: 0px;
-				height: 650px;
-				width: 700px;
-				background-color: #cfcfcf;
-				border-radius: 0 0 20px 20px;
-				margin: 0 auto;
-				text-align: center;
-			}
-
-			p {
-				padding: 10px;
-			}
-
-			.instagram-username > p {
-				width: 630px;
-				margin: 0 auto;
-				font-family: Tahoma;
-				font-size: 40px;
-				font-weight: bold;
-			}
-
-			.instagram-comment > p {
-				width: 630px;
-				margin: 0 auto;
-				font-family: Tahoma;
-				font-size: 12px;
-			}
-
-			.instagram-pic {
-				width: 630px;
-				margin: 0 auto;
-			}
-
-			.loader {
-				display: none;
-			}
-
-			img {
-				width: 630px;
-				height: 500px;
-			}
-		
-		</style>
+		<script src="static/js/main.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="static/css/styles.css">
+		<title>Lara Beatriz 15 Anos</title>
 	</head>
-
 	<body>
 		<div class="container">
-			<div class="header-container">				
-				<span>Envie sua foto com #VemRed!</span>				
-			</div>
-
-			<div class="image-container">
-				<div class="instagram-username">
-					<p>Instagram for Parties!</p>
+			<div class="row text-center center-block">
+				<div class="col-md-12">
+						<h3><span id="instagram-username" style="color: white"></span></h3>
 				</div>
-	
-				<div class="instagram-pic">
-					<img src="http://i.imgur.com/66ptSTe.jpg">
+				<div class="col-md-12">
+					<div class="instagram-pic">
+						<img class="center-block img-responsive" src="">
+					</div>
 				</div>
-
-				<div class="instagram-comment">
-					<p>Instagram for Parties!</p>
-				</div>				
 			</div>
 		</div>
-
-		<img class="loader"></img>
 	</body>
 </html>
